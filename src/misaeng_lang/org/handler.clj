@@ -9,7 +9,8 @@
 (함수 레이아웃
   "HTML 기본 레이아웃"
   [& contents]
-  (가정 [타이틀 "미생 - 실험적 한글 프로그래밍 언어"
+  (가정 [타이틀 "미생 - 다이나믹 한글 프로그래밍 언어"
+         사이트명 "미생 - 다이나믹 한글 프로그래밍 언어"
          설명 "설명"]
     (html5 [:head
             [:meta {:charset "utf-8"}]
@@ -18,7 +19,7 @@
             [:meta {:name "author" :content "김대현"}]
             [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0, minimum-scale=0.7"}]
 
-            [:meta {:property "og:site_name" :content "미생 프로그래밍 언어"}]
+            [:meta {:property "og:site_name" :content 사이트명}]
             [:meta {:property "og:url" :content "http://misang-lang.org/"}]
             [:meta {:property "og:title" :content 타이틀}]
             [:meta {:property "og:locale" :content "ko_KR"}]
@@ -70,8 +71,13 @@
             (into [:main] contents)
             [:footer "Copyrights 2016 Daehyun Kim"]))
 
+(defn 첫페이지
+  [요청]
+  (페이지 [:div
+           [:textarea#code]]))
+
 (defroutes app-routes
-  (GET "/" [] (페이지 "Hello World"))
+  (GET "/" [] 첫페이지)
   (route/not-found "Not Found"))
 
 (def app
@@ -80,7 +86,10 @@
                               "cm/lib/codemirror.css"
                               "css/미생.css")
       (리소스-합치는-미들웨어 "묶음.js"
-                              "cm/lib/codemirror.js")
+                              "js/jquery-3.1.0.min.js"
+                              "cm/lib/codemirror.js"
+                              "cm/mode/clojure/clojure.js"
+                              "js/미생.js")
       (wrap-defaults (assoc-in site-defaults
                                [:responses :content-types]
                                {:mime-types {"md" "text/markdown"}}))))
